@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# aptitude install devscripts bzr git
 set -e 
 
 ROOT_DIR="$PWD"

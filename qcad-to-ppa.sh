@@ -134,8 +134,8 @@ case "$1" in
     update_debian_changelog
   ;;
   push)
-    (cd $LAUNCHPAD_PKG_REPO && bzr push)
     (cd $LAUNCHPAD_SRC_REPO && bzr push)
+    (cd $LAUNCHPAD_PKG_REPO && bzr push)
   ;;
   debian)
     update_debian_changelog

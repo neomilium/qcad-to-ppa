@@ -4,9 +4,9 @@
 set -e 
 
 ROOT_DIR="$PWD"
-UPSTREAM_REPO="$ROOT_DIR/qcad.git"
-LAUNCHPAD_SRC_REPO="$ROOT_DIR/stable"
-LAUNCHPAD_PKG_REPO="$ROOT_DIR/packaging"
+UPSTREAM_REPO="$ROOT_DIR/gh-qcad-upstream"
+LAUNCHPAD_SRC_REPO="$ROOT_DIR/lp-qcad-stable"
+LAUNCHPAD_PKG_REPO="$ROOT_DIR/lp-qcad-packaging"
 
 
 fetch () {

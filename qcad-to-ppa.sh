@@ -1,13 +1,12 @@
 #!/bin/sh
 
-# aptitude install devscripts bzr git
+# apt install devscripts git
 set -e 
 
 ROOT_DIR="$PWD"
 UPSTREAM_REPO="$ROOT_DIR/gh-qcad-upstream"
 LAUNCHPAD_SRC_REPO="$ROOT_DIR/lp-qcad-stable"
 LAUNCHPAD_PKG_REPO="$ROOT_DIR/lp-qcad-packaging"
-
 
 fetch () {
   ## Update upstream repo
@@ -55,7 +54,7 @@ check_updates () {
   done
 }
 
-merge_upstream_to_bzr () {
+merge_upstream_to_launchpad () {
   if [ -z $NEXT_RELEASE_VERSION ]; then
     check_updates
   fi
@@ -69,14 +68,12 @@ merge_upstream_to_bzr () {
   DELETED_FILES=$(echo "$RSYNC_LOG" | grep  '^deleting ' | sed -e 's/^deleting \(.*\)/\1/')
 
   cd $LAUNCHPAD_SRC_REPO
-  if [ -z "$DELETED_FILES" ]; then
-    bzr remove $DELETED_FILES
-  fi
-  bzr add *
-  bzr commit -m"Import QCAD $NEXT_RELEASE_VERSION"
+  git status
+  git add .
+  git commit -m"Import QCAD $NEXT_RELEASE_VERSION"
 
   echo "Warning: your modifications have been committed but not pushed"
-  echo "> (cd $LAUNCHPAD_SRC_REPO && bzr push)"
+  echo "> (cd $LAUNCHPAD_SRC_REPO && git push)"
 }
 
 update_debian_changelog () {
@@ -96,7 +93,7 @@ update_debian_changelog () {
     exit 1
   fi
 
-  DCH_ENTRY_MSG="New upstream release\n    \n    Release date: $NEXT_TAG_DATE\n    Git tag hash: $NEXT_TAG_HASH"
+  DCH_ENTRY_MSG="New upstream release\n\n    Release date: $NEXT_TAG_DATE\n    Git tag hash: $NEXT_TAG_HASH"
 
   DEBEMAIL="neomilium@gmail.com" DEBFULLNAME="Romuald Conty" dch \
     --newversion "$NEXT_RELEASE_VERSION-1" \
@@ -109,11 +106,11 @@ update_debian_changelog () {
   sed -i $LAUNCHPAD_PKG_REPO/changelog -e "s/XXX/$DCH_ENTRY_MSG/"
 
   cd $LAUNCHPAD_PKG_REPO
-  bzr diff changelog || true
-  bzr add changelog
-  bzr commit -m"New upstream release: $NEXT_RELEASE_VERSION"
+  git diff changelog || true
+  git add changelog
+  git commit -m"New upstream release: $NEXT_RELEASE_VERSION"
   echo "Warning: your modifications have been committed but not pushed"
-  echo "> (cd $LAUNCHPAD_PKG_REPO && bzr push)"
+  echo "> (cd $LAUNCHPAD_PKG_REPO && git push)"
 }
 
 if [ "$#" -ne 1 ]; then
@@ -130,12 +127,12 @@ case "$1" in
     check_updates
   ;;
   merge)
-    merge_upstream_to_bzr
+    merge_upstream_to_launchpad
     update_debian_changelog
   ;;
   push)
-    (cd $LAUNCHPAD_SRC_REPO && bzr push)
-    (cd $LAUNCHPAD_PKG_REPO && bzr push)
+    (cd $LAUNCHPAD_SRC_REPO && git push)
+    (cd $LAUNCHPAD_PKG_REPO && git push)
   ;;
   debian)
     update_debian_changelog

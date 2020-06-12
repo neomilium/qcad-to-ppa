@@ -44,7 +44,7 @@ check_updates () {
 '
   for tag in $NEXT_TAGS; do
     echo $tag
-    NEXT_RELEASE_VERSION=$( echo $tag | sed -r 's/^([^#]+) # \((HEAD, |)tag: v([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)(, .*, master|)\) # ([^#]+)$/\3/' )
+    NEXT_RELEASE_VERSION=$( echo $tag | sed -r 's/^([^#]+) #.*tag: v([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*/\2/' )
     if [ "$NEXT_RELEASE_VERSION" = "$tag" ]; then
       echo "Skipping '$tag': its not a release"
     else
@@ -81,13 +81,13 @@ update_debian_changelog () {
     check_updates
   fi
 
-  NEXT_TAG_DATE=$( echo $NEXT_TAG | sed -r 's/^([^#]+) # \((HEAD, |)tag: v([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)(, .*, master|)\) # ([^#]+)$/\5/' )
+  NEXT_TAG_DATE=$( echo $NEXT_TAG | sed -r 's/^([^#]+) # .*# ([^#]+)$/\2/' )
   if [ "$NEXT_TAG_DATE" = "$NEXT_TAG" ]; then
     echo "Failed to extract date from $NEXT_TAG"
     exit 1
   fi
 
-  NEXT_TAG_HASH=$( echo $NEXT_TAG | sed -r 's/^([^#]+) # \((HEAD, |)tag: v([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)(, .*, master|)\) # ([^#]+)$/\1/' )
+  NEXT_TAG_HASH=$( echo $NEXT_TAG | sed -r 's/^([^#]+) # .*$/\1/' )
   if [ "$NEXT_TAG_HASH" = "$NEXT_TAG" ]; then
     echo "Failed to extract hash from $NEXT_TAG"
     exit 1

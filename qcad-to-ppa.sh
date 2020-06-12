@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # apt install devscripts git
-set -e 
+set -ex
 
 ROOT_DIR="$PWD"
 UPSTREAM_REPO="$ROOT_DIR/gh-qcad-upstream"

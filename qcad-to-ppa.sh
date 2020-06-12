@@ -106,11 +106,12 @@ update_debian_changelog () {
   sed -i $LAUNCHPAD_PKG_REPO/changelog -e "s/XXX/$DCH_ENTRY_MSG/"
 
   cd $LAUNCHPAD_PKG_REPO
+  git checkout master
   git diff changelog || true
   git add changelog
   git commit -m"New upstream release: $NEXT_RELEASE_VERSION"
   echo "Warning: your modifications have been committed but not pushed"
-  echo "> (cd $LAUNCHPAD_PKG_REPO && git push)"
+  echo "> (cd $LAUNCHPAD_PKG_REPO && git checkout master && git push)"
 }
 
 if [ "$#" -ne 1 ]; then
@@ -132,7 +133,7 @@ case "$1" in
   ;;
   push)
     (cd $LAUNCHPAD_SRC_REPO && git push)
-    (cd $LAUNCHPAD_PKG_REPO && git push)
+    (cd $LAUNCHPAD_PKG_REPO && git checkout master && git push)
   ;;
   debian)
     update_debian_changelog

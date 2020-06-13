@@ -63,7 +63,7 @@ merge_upstream_to_launchpad () {
   cd $UPSTREAM_REPO
 
   ( cd $UPSTREAM_REPO && git checkout $NEXT_GIT_TAG && grep R_QCAD_VERSION_STRING $UPSTREAM_REPO/src/core/RVersion.h )
-  RSYNC_LOG=$( rsync -rv --delete-after --exclude '.gitignore' --exclude '.git' --exclude '.bzr' $UPSTREAM_REPO/ $LAUNCHPAD_SRC_REPO/ )
+  RSYNC_LOG=$( rsync -rv --delete-after --exclude '.gitignore' --exclude '.git' --exclude '.pc' $UPSTREAM_REPO/ $LAUNCHPAD_SRC_REPO/ )
 
   DELETED_FILES=$(echo "$RSYNC_LOG" | grep  '^deleting ' | sed -e 's/^deleting \(.*\)/\1/')
 

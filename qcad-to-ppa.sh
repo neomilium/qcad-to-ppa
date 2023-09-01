@@ -114,6 +114,12 @@ update_debian_changelog () {
   git diff changelog || true
   git add changelog
   git commit -m"New upstream release: $NEXT_RELEASE_VERSION"
+
+  # Qt 5
+  git checkout qt5
+  git cherry-pick master
+  git checkout master
+
   echo "Warning: your modifications have been committed but not pushed"
 }
 
@@ -137,6 +143,7 @@ case "$1" in
   push)
     (cd $LAUNCHPAD_SRC_REPO && git push)
     (cd $LAUNCHPAD_PKG_REPO && git checkout master && git push)
+    (cd $LAUNCHPAD_PKG_REPO && git checkout qt5 && git push)
   ;;
   debian)
     update_debian_changelog

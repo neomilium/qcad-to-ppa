@@ -78,7 +78,6 @@ merge_upstream_to_launchpad () {
   git commit -m"Import QCAD $NEXT_RELEASE_VERSION"
 
   echo "Warning: your modifications have been committed but not pushed"
-  echo "> (cd $LAUNCHPAD_SRC_REPO && git push)"
 }
 
 update_debian_changelog () {
@@ -116,7 +115,6 @@ update_debian_changelog () {
   git add changelog
   git commit -m"New upstream release: $NEXT_RELEASE_VERSION"
   echo "Warning: your modifications have been committed but not pushed"
-  echo "> (cd $LAUNCHPAD_PKG_REPO && git checkout master && git push)"
 }
 
 if [ "$#" -ne 1 ]; then

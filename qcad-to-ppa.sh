@@ -3,6 +3,11 @@
 # apt install devscripts git
 set -ex
 
+# Ensure requirements are installed
+which git
+which dpkg-parsechangelog
+which dch
+
 ROOT_DIR="$PWD"
 UPSTREAM_REPO="$ROOT_DIR/gh-qcad-upstream"
 LAUNCHPAD_SRC_REPO="$ROOT_DIR/lp-qcad-stable"

@@ -131,7 +131,7 @@ fi
 case "$1" in
   update)
     fetch
-	check_updates
+    check_updates
   ;;
   list)
     check_updates
